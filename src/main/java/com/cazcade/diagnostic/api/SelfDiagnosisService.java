@@ -1,4 +1,4 @@
-package com.cazcade.snapito.common.diagnosis.api;
+package com.cazcade.diagnostic.api;
 
 import java.util.List;
 import java.util.regex.Pattern;

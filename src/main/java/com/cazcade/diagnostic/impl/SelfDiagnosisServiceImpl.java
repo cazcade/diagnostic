@@ -1,6 +1,6 @@
-package com.cazcade.snapito.common.diagnosis.impl;
+package com.cazcade.diagnostic.impl;
 
-import com.cazcade.snapito.common.diagnosis.api.*;
+import com.cazcade.diagnostic.api.*;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;

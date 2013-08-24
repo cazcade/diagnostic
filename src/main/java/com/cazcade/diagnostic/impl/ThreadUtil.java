@@ -1,4 +1,4 @@
-package com.cazcade.snapito.common.diagnosis.impl;
+package com.cazcade.diagnostic.impl;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;

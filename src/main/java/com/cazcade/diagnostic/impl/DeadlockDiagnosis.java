@@ -1,6 +1,6 @@
-package com.cazcade.snapito.common.diagnosis.impl;
+package com.cazcade.diagnostic.impl;
 
-import com.cazcade.snapito.common.diagnosis.api.Diagnosis;
+import com.cazcade.diagnostic.api.Diagnosis;
 
 import java.lang.management.ThreadInfo;
 import java.util.ArrayList;

@@ -1,8 +1,8 @@
-package com.cazcade.snapito.common.diagnosis.impl;
+package com.cazcade.diagnostic.impl;
 
-import com.cazcade.snapito.common.diagnosis.api.Diagnosis;
-import com.cazcade.snapito.common.diagnosis.api.DiagnosticCheck;
-import com.cazcade.snapito.common.diagnosis.api.DiagnosticContext;
+import com.cazcade.diagnostic.api.Diagnosis;
+import com.cazcade.diagnostic.api.DiagnosticCheck;
+import com.cazcade.diagnostic.api.DiagnosticContext;
 
 import java.lang.management.ManagementFactory;
 
