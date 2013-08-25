@@ -29,15 +29,17 @@ public class GCDiagnosticCheck implements DiagnosticCheck {
         diagnosis = new GCDiagnosis();
         List<GarbageCollectorMXBean> memoryMXBean = ManagementFactory.getGarbageCollectorMXBeans();
         for (GarbageCollectorMXBean garbageCollectorMXBean : memoryMXBean) {
-            long collectionCount = garbageCollectorMXBean.getCollectionCount();
-            AtomicLong previousCount = map.get(garbageCollectorMXBean.getName());
+            long count = garbageCollectorMXBean.getCollectionCount();
+            long collectionCount = count;
+            String name = garbageCollectorMXBean.getName();
+            AtomicLong previousCount = map.get(name);
             if (previousCount != null) {
                 long diff = collectionCount - previousCount.get();
                 if (diff > threshold) {
-                    diagnosis.add(garbageCollectorMXBean.getName(), diff, garbageCollectorMXBean.getCollectionCount(), garbageCollectorMXBean.getCollectionTime());
+                    diagnosis.add(name, diff, count, garbageCollectorMXBean.getCollectionTime());
                 }
             }
-            map.put(garbageCollectorMXBean.getName(), new AtomicLong(garbageCollectorMXBean.getCollectionCount()));
+            map.put(name, new AtomicLong(count));
         }
     }
 

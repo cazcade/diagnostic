@@ -13,10 +13,15 @@ import java.util.regex.Pattern;
  */
 public class SelfDiagnosisServiceImpl implements SelfDiagnosisService, DiagnosticContext {
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(SelfDiagnosisServiceImpl.class);
+    private int frequencyInSeconds = 10;
     //    private final Map<Pattern, DiagnosisListener> listeners= new HashMap<Pattern, DiagnosisListener>();
     private List<Listener> listeners = new CopyOnWriteArrayList<Listener>();
     private Timer timer;
     private List<DiagnosticCheck> checks = new ArrayList<DiagnosticCheck>();
+
+    public void setFrequencyInSeconds(int frequencyInSeconds) {
+        this.frequencyInSeconds = frequencyInSeconds;
+    }
 
     public void setListeners(Map<String, DiagnosisListener> newListeners) {
         listeners.clear();
@@ -28,7 +33,6 @@ public class SelfDiagnosisServiceImpl implements SelfDiagnosisService, Diagnosti
     public void setChecks(List<DiagnosticCheck> checks) {
         this.checks = checks;
     }
-
 
     public void init() {
         timer = new Timer("Diagnosis");
@@ -50,12 +54,12 @@ public class SelfDiagnosisServiceImpl implements SelfDiagnosisService, Diagnosti
                         log.error("Check {} FAILED,  repair failed, diagnosis was {}", check.name(), check.diagnosis().text());
                         fire(check.name() + ".ERROR", check.diagnosis());
                     } else {
-                        log.info("Check {} PASSED", check.name());
+                        log.debug("Check {} PASSED", check.name());
                         fire(check.name() + ".OK", check.diagnosis());
                     }
                 }
             }
-        }, 0, 5000);
+        }, 0, frequencyInSeconds * 1000);
     }
 
     public void fire(String path, Diagnosis diagnosis) {
@@ -67,7 +71,7 @@ public class SelfDiagnosisServiceImpl implements SelfDiagnosisService, Diagnosti
                     log.error(e.getMessage(), e);
                 }
             } else {
-                log.info("{} did not match {}", path, listener.pattern.toString());
+                log.debug("{} did not match {}", path, listener.pattern.toString());
             }
         }
     }
