@@ -8,7 +8,7 @@ import com.cazcade.diagnostic.api.DiagnosticContext;
  * @todo document.
  */
 public class SystemLoadDiagnosis implements Diagnosis {
-    public static final double THRESHOLD = 3.0;
+    public static final double THRESHOLD = 9.0;
     private final DiagnosticContext context;
     private final double systemLoadAverage;
 
