@@ -8,9 +8,11 @@ import java.util.regex.Pattern;
  * @todo document.
  */
 public interface SelfDiagnosisService {
+    int registerCheck(DiagnosticCheck check);
+
     List<Diagnosis> diagnose();
 
     int listen(Pattern regex, DiagnosisListener listener);
 
-    void remove(int listener);
+    void removeListener(int listener);
 }

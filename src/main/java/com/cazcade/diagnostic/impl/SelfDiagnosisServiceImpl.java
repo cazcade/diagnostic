@@ -29,6 +29,7 @@ public class SelfDiagnosisServiceImpl implements SelfDiagnosisService, Diagnosti
         this.checks = checks;
     }
 
+
     public void init() {
         timer = new Timer("Diagnosis");
         timer.schedule(new TimerTask() {
@@ -46,10 +47,11 @@ public class SelfDiagnosisServiceImpl implements SelfDiagnosisService, Diagnosti
                     //re-check
                     check.perform(SelfDiagnosisServiceImpl.this);
                     if (!check.diagnosis().success()) {
-                        fire(check.name() + ".ERROR", check.diagnosis());
                         log.error("Check {} FAILED,  repair failed, diagnosis was {}", check.name(), check.diagnosis().text());
+                        fire(check.name() + ".ERROR", check.diagnosis());
                     } else {
                         log.info("Check {} PASSED", check.name());
+                        fire(check.name() + ".OK", check.diagnosis());
                     }
                 }
             }
@@ -59,11 +61,21 @@ public class SelfDiagnosisServiceImpl implements SelfDiagnosisService, Diagnosti
     public void fire(String path, Diagnosis diagnosis) {
         for (Listener listener : listeners) {
             if (listener.pattern.matcher(path).matches()) {
-                listener.diagnosisListener.handle(path, diagnosis);
+                try {
+                    listener.diagnosisListener.handle(path, diagnosis);
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
             } else {
                 log.info("{} did not match {}", path, listener.pattern.toString());
             }
         }
+    }
+
+    @Override
+    public int registerCheck(DiagnosticCheck check) {
+        checks.add(check);
+        return checks.indexOf(check);
     }
 
     @Override
@@ -83,7 +95,7 @@ public class SelfDiagnosisServiceImpl implements SelfDiagnosisService, Diagnosti
     }
 
     @Override
-    public void remove(int id) {
+    public void removeListener(int id) {
         listeners.remove(id);
     }
 
