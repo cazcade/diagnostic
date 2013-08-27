@@ -5,7 +5,6 @@ import com.cazcade.diagnostic.api.DiagnosticCheck;
 import com.cazcade.diagnostic.api.DiagnosticContext;
 
 import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadMXBean;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -19,9 +18,7 @@ public class ExcessiveThreadsDiagnosticCheck implements DiagnosticCheck {
 
     @Override
     public void perform(DiagnosticContext selfDiagnosisService) {
-        DeadlockDiagnosis newDiagnosis= new DeadlockDiagnosis();
-        ThreadMXBean bean = ManagementFactory.getThreadMXBean();
-        diagnosis= new ExcessiveThreadsDiagnosis(bean.getThreadCount(), threadLimit);
+        diagnosis= new ExcessiveThreadsDiagnosis(ManagementFactory.getThreadMXBean().getThreadCount(), threadLimit);
 
     }
 
