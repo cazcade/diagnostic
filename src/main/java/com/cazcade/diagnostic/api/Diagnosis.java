@@ -9,4 +9,5 @@ public interface Diagnosis {
     String text();
     boolean success();
     void repair();
+    DiagnosisEvent<? extends Diagnosis> event(String path);
 }

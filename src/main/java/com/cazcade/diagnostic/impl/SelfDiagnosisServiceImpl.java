@@ -66,7 +66,7 @@ public class SelfDiagnosisServiceImpl implements SelfDiagnosisService, Diagnosti
         for (Listener listener : listeners) {
             if (listener.pattern.matcher(path).matches()) {
                 try {
-                    listener.diagnosisListener.handle(path, diagnosis);
+                    listener.diagnosisListener.handle(diagnosis.event(path));
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
                 }

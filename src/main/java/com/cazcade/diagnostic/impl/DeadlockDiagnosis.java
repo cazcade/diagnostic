@@ -1,6 +1,7 @@
 package com.cazcade.diagnostic.impl;
 
 import com.cazcade.diagnostic.api.Diagnosis;
+import com.cazcade.diagnostic.api.DiagnosisEvent;
 
 import java.lang.management.ThreadInfo;
 import java.util.ArrayList;
@@ -38,6 +39,11 @@ public class DeadlockDiagnosis implements Diagnosis {
                 ThreadUtil.getInstance().getThread(deadlockedThread.getThreadId()).interrupt();
             }
         }
+    }
+
+    @Override
+    public DiagnosisEvent<? extends Diagnosis> event(String path) {
+        return new DeadlockEvent(this, path);
     }
 
     public void addDeadlockedThread(ThreadInfo info) {

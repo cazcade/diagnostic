@@ -1,6 +1,7 @@
 package com.cazcade.diagnostic.impl;
 
 import com.cazcade.diagnostic.api.Diagnosis;
+import com.cazcade.diagnostic.api.DiagnosisEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,5 +35,10 @@ public class GCDiagnosis implements Diagnosis {
     @Override
     public void repair() {
         //TODO
+    }
+
+    @Override
+    public DiagnosisEvent<? extends Diagnosis> event(String path) {
+        return new GCEvent(this,path);
     }
 }

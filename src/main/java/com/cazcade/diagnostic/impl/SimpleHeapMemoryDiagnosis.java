@@ -1,6 +1,7 @@
 package com.cazcade.diagnostic.impl;
 
 import com.cazcade.diagnostic.api.Diagnosis;
+import com.cazcade.diagnostic.api.DiagnosisEvent;
 
 import java.lang.management.ManagementFactory;
 
@@ -32,5 +33,10 @@ public class SimpleHeapMemoryDiagnosis implements Diagnosis {
     @Override
     public void repair() {
         ManagementFactory.getMemoryMXBean().gc();
+    }
+
+    @Override
+    public DiagnosisEvent<? extends Diagnosis> event(String path) {
+        return new SimpleHeapMemoryEvent(this,path);
     }
 }

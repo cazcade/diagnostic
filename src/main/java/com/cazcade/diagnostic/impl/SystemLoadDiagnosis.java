@@ -1,6 +1,7 @@
 package com.cazcade.diagnostic.impl;
 
 import com.cazcade.diagnostic.api.Diagnosis;
+import com.cazcade.diagnostic.api.DiagnosisEvent;
 import com.cazcade.diagnostic.api.DiagnosticContext;
 
 /**
@@ -29,5 +30,10 @@ public class SystemLoadDiagnosis implements Diagnosis {
 
     @Override
     public void repair() {
+    }
+
+    @Override
+    public DiagnosisEvent<? extends Diagnosis> event(String path) {
+        return new SystemLoadEvent(this,path);
     }
 }
