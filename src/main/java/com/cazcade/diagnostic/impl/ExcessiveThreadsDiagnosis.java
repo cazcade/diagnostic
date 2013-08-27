@@ -9,7 +9,7 @@ import com.cazcade.diagnostic.api.DiagnosisEvent;
  */
 public class ExcessiveThreadsDiagnosis implements Diagnosis {
     private final int threadCount;
-    private  int threadLimit = 30;
+    private  int threadLimit = 300;
 
     public void setThreadLimit(int threadLimit) {
         this.threadLimit = threadLimit;
