@@ -15,12 +15,13 @@ public class ExcessiveThreadsDiagnosticCheck implements DiagnosticCheck {
     ThreadGroup rootThreadGroup = null;
 
     private ExcessiveThreadsDiagnosis diagnosis= null;
+    private int threadLimit= 300;
 
     @Override
     public void perform(DiagnosticContext selfDiagnosisService) {
         DeadlockDiagnosis newDiagnosis= new DeadlockDiagnosis();
         ThreadMXBean bean = ManagementFactory.getThreadMXBean();
-        diagnosis= new ExcessiveThreadsDiagnosis(bean.getThreadCount());
+        diagnosis= new ExcessiveThreadsDiagnosis(bean.getThreadCount(), threadLimit);
 
     }
 
@@ -35,4 +36,7 @@ public class ExcessiveThreadsDiagnosticCheck implements DiagnosticCheck {
     }
 
 
+    public void setThreadLimit(int threadLimit) {
+        this.threadLimit = threadLimit;
+    }
 }

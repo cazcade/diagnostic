@@ -9,15 +9,14 @@ import com.cazcade.diagnostic.api.DiagnosisEvent;
  */
 public class ExcessiveThreadsDiagnosis implements Diagnosis {
     private final int threadCount;
-    private  int threadLimit = 300;
+    private  int threadLimit;
 
-    public void setThreadLimit(int threadLimit) {
-        this.threadLimit = threadLimit;
-    }
 
-    public ExcessiveThreadsDiagnosis(int threadCount) {
+
+    public ExcessiveThreadsDiagnosis(int threadCount, int threadLimit) {
         super();
         this.threadCount = threadCount;
+        this.threadLimit = threadLimit;
     }
 
     @Override
