@@ -28,13 +28,23 @@ public class ExcessiveThreadsDiagnosis implements Diagnosis {
         Thread[] threads = ThreadUtil.getInstance().getAllThreads();
         Multiset<String> counter= HashMultiset.create();
         for (Thread thread : threads) {
-            counter.add(thread.getName());
+            counter.add(translate(thread.getName()));
         }
-        for (String name : counter) {
+        for (String name : counter.elementSet()) {
             builder.append("Thread ").append(name).append(" : ").append(counter.count(name)).append("\n");
         }
 
         return builder.append("Total Threads ").append(threadCount).append("/").append(threadLimit).append("\n").toString();
+    }
+
+    private String translate(String name) {
+        if(name.matches("qtp.*acceptor-.*-ServerConnector.*")) {
+            return "Jetty Acceptor";
+        }
+        if(name.matches("qtp.*selector.*")) {
+            return "Jetty Selector";
+        }
+        return name;
     }
 
     @Override
