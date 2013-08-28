@@ -2,6 +2,8 @@ package com.cazcade.diagnostic.impl;
 
 import com.cazcade.diagnostic.api.Diagnosis;
 import com.cazcade.diagnostic.api.DiagnosisEvent;
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -21,7 +23,18 @@ public class ExcessiveThreadsDiagnosis implements Diagnosis {
 
     @Override
     public String text() {
-        return "Threads "+threadCount+"/"+threadLimit;
+        StringBuilder builder= new StringBuilder();
+
+        Thread[] threads = ThreadUtil.getInstance().getAllThreads();
+        Multiset<String> counter= HashMultiset.create();
+        for (Thread thread : threads) {
+            counter.add(thread.getName());
+        }
+        for (String name : counter) {
+            builder.append("Thread ").append(name).append(" : ").append(counter.count(name)).append("\n");
+        }
+
+        return builder.append("Total Threads ").append(threadCount).append("/").append(threadLimit).append("\n").toString();
     }
 
     @Override
