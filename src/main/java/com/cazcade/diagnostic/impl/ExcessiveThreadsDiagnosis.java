@@ -10,9 +10,10 @@ import com.google.common.collect.Multiset;
  * @todo document.
  */
 public class ExcessiveThreadsDiagnosis implements Diagnosis {
+    public static final double ANALYSIS_THRESHOLD = .6;
     private final int threadCount;
-    private  int threadLimit;
     private final Thread[] threads;
+    private int threadLimit;
 
 
     public ExcessiveThreadsDiagnosis(Thread[] threads, int threadLimit) {
@@ -24,39 +25,41 @@ public class ExcessiveThreadsDiagnosis implements Diagnosis {
 
     @Override
     public String text() {
-        StringBuilder builder= new StringBuilder();
+        StringBuilder builder = new StringBuilder();
 
-        Multiset<String> counter= HashMultiset.create();
-        for (Thread thread : threads) {
-            counter.add(translate(thread.getName()));
-        }
-        for (String name : counter.elementSet()) {
-            builder.append("Thread ").append(name).append(" : ").append(counter.count(name)).append("\n");
+        if (threadCount > threadLimit * ANALYSIS_THRESHOLD) {
+            Multiset<String> counter = HashMultiset.create();
+            for (Thread thread : threads) {
+                counter.add(translate(thread.getName()));
+            }
+            for (String name : counter.elementSet()) {
+                builder.append("Thread ").append(name).append(" : ").append(counter.count(name)).append("\n");
+            }
         }
 
         return builder.append("Total Threads ").append(threadCount).append("/").append(threadLimit).append("\n").toString();
     }
 
     private String translate(String name) {
-        if(name.matches("qtp.*acceptor-.*-ServerConnector.*")) {
+        if (name.matches("qtp.*acceptor-.*-ServerConnector.*")) {
             return "Jetty Acceptor";
         }
-        if(name.matches("qtp.*selector.*")) {
+        if (name.matches("qtp.*selector.*")) {
             return "Jetty Selector";
         }
-        if(name.matches("qtp\\d+-\\d+")) {
+        if (name.matches("qtp\\d+-\\d+")) {
             return "Queued Thread Pool (no name)";
         }
-        if(name.matches("Timer-\\d+")) {
+        if (name.matches("Timer-\\d+")) {
             return "Timer (no name)";
         }
-        if(name.matches("New Relic .*")) {
+        if (name.matches("New Relic .*")) {
             return "New Relic";
         }
-        if(name.matches("pool-\\d+-thread-\\d+")) {
+        if (name.matches("pool-\\d+-thread-\\d+")) {
             return "Thread Pool (no name)";
         }
-        return name.replace("\\W+"," ").replace("\\d+"," ").replace("\\s+"," ");
+        return name.replace("\\W+", " ").replace("\\d+", " ").replace("\\s+", " ");
     }
 
     @Override
