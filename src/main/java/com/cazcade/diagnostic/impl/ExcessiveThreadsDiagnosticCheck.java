@@ -11,7 +11,6 @@ import java.lang.management.ManagementFactory;
  * @todo document.
  */
 public class ExcessiveThreadsDiagnosticCheck implements DiagnosticCheck {
-    ThreadGroup rootThreadGroup = null;
 
     private ExcessiveThreadsDiagnosis diagnosis= null;
     private int threadLimit= 300;
