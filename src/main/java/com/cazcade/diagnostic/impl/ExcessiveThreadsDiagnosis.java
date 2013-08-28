@@ -44,6 +44,15 @@ public class ExcessiveThreadsDiagnosis implements Diagnosis {
         if(name.matches("qtp.*selector.*")) {
             return "Jetty Selector";
         }
+        if(name.matches("Timer-\\d+")) {
+            return "Timer (no name)";
+        }
+        if(name.matches("New Relic .*")) {
+            return "New Relic";
+        }
+        if(name.matches("pool-\\d+-thread-\\d+")) {
+            return "Thread Pool (no name)";
+        }
         return name;
     }
 
