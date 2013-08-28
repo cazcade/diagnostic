@@ -12,12 +12,13 @@ import com.google.common.collect.Multiset;
 public class ExcessiveThreadsDiagnosis implements Diagnosis {
     private final int threadCount;
     private  int threadLimit;
+    private final Thread[] threads;
 
 
-
-    public ExcessiveThreadsDiagnosis(int threadCount, int threadLimit) {
+    public ExcessiveThreadsDiagnosis(Thread[] threads, int threadLimit) {
         super();
-        this.threadCount = threadCount;
+        this.threads = threads;
+        this.threadCount = threads.length;
         this.threadLimit = threadLimit;
     }
 
@@ -25,7 +26,6 @@ public class ExcessiveThreadsDiagnosis implements Diagnosis {
     public String text() {
         StringBuilder builder= new StringBuilder();
 
-        Thread[] threads = ThreadUtil.getInstance().getAllThreads();
         Multiset<String> counter= HashMultiset.create();
         for (Thread thread : threads) {
             counter.add(translate(thread.getName()));
