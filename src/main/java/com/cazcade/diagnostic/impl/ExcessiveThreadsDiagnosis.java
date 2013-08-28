@@ -59,7 +59,7 @@ public class ExcessiveThreadsDiagnosis implements Diagnosis {
         if (name.matches("pool-\\d+-thread-\\d+")) {
             return "Thread Pool (no name)";
         }
-        return name.replace("\\W+", " ").replace("\\d+", " ").replace("\\s+", " ");
+        return name.replace("-+", " ").replace("\\d+", " ").replace("\\s+", " ");
     }
 
     @Override
