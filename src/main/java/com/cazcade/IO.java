@@ -1,18 +1,27 @@
 package com.cazcade;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.ByteBuffer;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
-import java.nio.channels.WritableByteChannel;
+import java.nio.channels.*;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  * @todo document.
  */
 public final class IO {
+
+    public void copy(File source, File target) throws IOException {
+        FileChannel in = new FileInputStream(source).getChannel();
+        FileChannel out = new FileOutputStream(target).getChannel();
+
+// JavaVM does its best to do this as native I/O operations.
+        in.transferTo (0, in.size(), out);
+
+// Closing file channels will close corresponding stream objects as well.
+        out.close();
+        in.close();
+    }
+
     public static void fastChannelCopy(final ReadableByteChannel src, final WritableByteChannel dest) throws IOException {
         final ByteBuffer buffer = ByteBuffer.allocateDirect(16 * 1024);
         while (src.read(buffer) != -1) {
