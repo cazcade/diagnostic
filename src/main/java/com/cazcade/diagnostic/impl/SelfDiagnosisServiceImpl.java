@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  */
 public class SelfDiagnosisServiceImpl implements SelfDiagnosisService, DiagnosticContext {
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(SelfDiagnosisServiceImpl.class);
-    private int frequencyInSeconds = 10;
+    private int frequencyInSeconds = 30;
     //    private final Map<Pattern, DiagnosisListener> listeners= new HashMap<Pattern, DiagnosisListener>();
     private List<Listener> listeners = new CopyOnWriteArrayList<Listener>();
     private Timer timer;
