@@ -28,9 +28,10 @@ public class ExcessiveThreadsDiagnosis implements Diagnosis {
         StringBuilder builder = new StringBuilder();
 
         if (threadCount > threadLimit * ANALYSIS_THRESHOLD) {
+            Thread[] ts = threads;
             Multiset<String> counter = HashMultiset.create();
-            for (Thread thread : threads) {
-                counter.add(translate(thread.getName()));
+            for (Thread thread : ts) {
+                counter.add(ThreadUtil.translate(thread.getName()));
             }
             for (String name : counter.elementSet()) {
                 builder.append("Thread ").append(name).append(" : ").append(counter.count(name)).append("\n");
@@ -38,28 +39,6 @@ public class ExcessiveThreadsDiagnosis implements Diagnosis {
         }
 
         return builder.append("Total Threads ").append(threadCount).append("/").append(threadLimit).append("\n").toString();
-    }
-
-    private String translate(String name) {
-        if (name.matches("qtp.*acceptor-.*-ServerConnector.*")) {
-            return "Jetty Acceptor";
-        }
-        if (name.matches("qtp.*selector.*")) {
-            return "Jetty Selector";
-        }
-        if (name.matches("qtp\\d+-\\d+")) {
-            return "Queued Thread Pool (no name)";
-        }
-        if (name.matches("Timer-\\d+")) {
-            return "Timer (no name)";
-        }
-        if (name.matches("New Relic .*")) {
-            return "New Relic";
-        }
-        if (name.matches("pool-\\d+-thread-\\d+")) {
-            return "Thread Pool (no name)";
-        }
-        return name.replace("-+", " ").replace("\\d+", " ").replace("\\s+", " ");
     }
 
     @Override

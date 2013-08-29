@@ -20,6 +20,28 @@ public class ThreadUtil {
         return threadUtil;
     }
 
+    public static String translate(String name) {
+        if (name.matches("qtp.*acceptor-.*-ServerConnector.*")) {
+            return "Jetty Acceptor";
+        }
+        if (name.matches("qtp.*selector.*")) {
+            return "Jetty Selector";
+        }
+        if (name.matches("qtp\\d+-\\d+")) {
+            return "Queued Thread Pool (no name)";
+        }
+        if (name.matches("Timer-\\d+")) {
+            return "Timer (no name)";
+        }
+        if (name.matches("New Relic .*")) {
+            return "New Relic";
+        }
+        if (name.matches("pool-\\d+-thread-\\d+")) {
+            return "Thread Pool (no name)";
+        }
+        return name.replace("-+", " ").replace("\\d+", " ").replace("\\s+", " ");
+    }
+
     ThreadGroup getRootThreadGroup() {
         if (rootThreadGroup != null)
             return rootThreadGroup;
