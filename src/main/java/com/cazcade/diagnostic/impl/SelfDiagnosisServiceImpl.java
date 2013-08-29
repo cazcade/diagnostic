@@ -5,6 +5,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 /**
@@ -16,7 +19,7 @@ public class SelfDiagnosisServiceImpl implements SelfDiagnosisService, Diagnosti
     private int frequencyInSeconds = 30;
     //    private final Map<Pattern, DiagnosisListener> listeners= new HashMap<Pattern, DiagnosisListener>();
     private List<Listener> listeners = new CopyOnWriteArrayList<Listener>();
-    private Timer timer;
+    private ScheduledExecutorService timer= Executors.newSingleThreadScheduledExecutor();
     private List<DiagnosticCheck> checks = new ArrayList<DiagnosticCheck>();
 
     public void setFrequencyInSeconds(int frequencyInSeconds) {
@@ -35,7 +38,6 @@ public class SelfDiagnosisServiceImpl implements SelfDiagnosisService, Diagnosti
     }
 
     public void init() {
-        timer = new Timer("Diagnosis");
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -60,10 +62,10 @@ public class SelfDiagnosisServiceImpl implements SelfDiagnosisService, Diagnosti
                     }
                 }
                 } finally {
-                    timer.schedule(this,frequencyInSeconds * 1000);
+                        timer.schedule(this,frequencyInSeconds * 1000, TimeUnit.MILLISECONDS);
                 }
             }
-        }, frequencyInSeconds * 1000);
+        }, frequencyInSeconds * 1000, TimeUnit.MILLISECONDS);
     }
 
     public void fire(String path, Diagnosis diagnosis) {
@@ -108,7 +110,7 @@ public class SelfDiagnosisServiceImpl implements SelfDiagnosisService, Diagnosti
     }
 
     public void destroy() {
-        timer.cancel();
+        timer.shutdownNow();
     }
 
     private static class Listener {
