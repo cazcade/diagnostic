@@ -39,6 +39,7 @@ public class SelfDiagnosisServiceImpl implements SelfDiagnosisService, Diagnosti
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                try {
                 for (DiagnosticCheck check : checks) {
                     check.perform(SelfDiagnosisServiceImpl.this);
                     //attempt self fix
@@ -58,8 +59,11 @@ public class SelfDiagnosisServiceImpl implements SelfDiagnosisService, Diagnosti
                         fire(check.name() + ".OK", check.diagnosis());
                     }
                 }
+                } finally {
+                    timer.schedule(this,frequencyInSeconds * 1000);
+                }
             }
-        }, 0, frequencyInSeconds * 1000);
+        }, frequencyInSeconds * 1000);
     }
 
     public void fire(String path, Diagnosis diagnosis) {
